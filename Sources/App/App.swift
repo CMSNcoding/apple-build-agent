@@ -4,25 +4,32 @@ import SwiftUI
 struct AppleBuildAgentApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootTabView()
         }
     }
 }
 
-struct ContentView: View {
-    @State private var count = 0
+struct RootTabView: View {
+    @State private var selection = 0
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("apple-build-agent")
-                .font(.largeTitle.bold())
-            Text("built by GitHub Actions")
-                .foregroundStyle(.secondary)
-            Button("tap me: \(count)") {
-                count += 1
-            }
-            .buttonStyle(.borderedProminent)
+        TabView(selection: $selection) {
+            QuoteView()
+                .tabItem { Label("一言", systemImage: "quote.bubble") }
+                .tag(0)
+
+            NewsView()
+                .tabItem { Label("热榜", systemImage: "flame") }
+                .tag(1)
+
+            ClockView()
+                .tabItem { Label("时钟", systemImage: "clock") }
+                .tag(2)
+
+            TodoView()
+                .tabItem { Label("待办", systemImage: "checkmark.circle") }
+                .tag(3)
         }
-        .padding()
+        .tint(Color.accentColor)
     }
 }
