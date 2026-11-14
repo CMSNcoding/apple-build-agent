@@ -1,35 +1,34 @@
 import SwiftUI
+import UserNotifications
 
 @main
-struct AppleBuildAgentApp: App {
+struct FocusApp: App {
+    @StateObject private var stats = StatsStore()
+
+    init() {
+        UNUserNotificationCenter.current()
+            .requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
+    }
+
     var body: some Scene {
         WindowGroup {
             RootTabView()
+                .environmentObject(stats)
         }
     }
 }
 
 struct RootTabView: View {
-    @State private var selection = 0
-
     var body: some View {
-        TabView(selection: $selection) {
-            QuoteView()
-                .tabItem { Label("一言", systemImage: "quote.bubble") }
-                .tag(0)
-
-            NewsView()
-                .tabItem { Label("热榜", systemImage: "flame") }
-                .tag(1)
-
-            ClockView()
-                .tabItem { Label("时钟", systemImage: "clock") }
-                .tag(2)
-
-            TodoView()
-                .tabItem { Label("待办", systemImage: "checkmark.circle") }
-                .tag(3)
+        TabView {
+            FocusHomeView()
+                .tabItem { Label("专注", systemImage: "timer") }
+            ExamView()
+                .tabItem { Label("考试", systemImage: "graduationcap") }
+            StatsView()
+                .tabItem { Label("统计", systemImage: "chart.bar.fill") }
+            SettingsView()
+                .tabItem { Label("设置", systemImage: "gearshape") }
         }
-        .tint(Color.accentColor)
     }
 }
